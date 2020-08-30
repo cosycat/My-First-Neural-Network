@@ -25,7 +25,7 @@ public class ArrayHelperMethods {
         return ar;
     }
 
-    public static double[][] createRandomArray(int sizeX, int sizeY, double lower_bound, double upper_bound){
+    public static double[][] createRandom2DArray(int sizeX, int sizeY, double lower_bound, double upper_bound){
         if(sizeX < 1 || sizeY < 1){
             return null;
         }
