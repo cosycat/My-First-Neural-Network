@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Network {
 
     private double[][] output; // Collection of all the outputs of all the neurons. [layers][neurons in layer]
@@ -76,6 +78,28 @@ public class Network {
         for (int i = 0; i < trainingCount; i++) {
             train(input, expectedOutput, eta);
         }
+    }
+    
+    /**
+     * Trains the NN 10^x times with the same input/output.
+     * Prints the output after 10, 100, 1000, …, 10^x times.
+     * @param x How often it will be calculated
+     * @param input The input to calculate the output.
+     * @param expectedOutput The output which is to be expected by the input.
+     * @param eta The learning rate.
+     */
+    public void trainWithExponentialOutput(int x, double[] input, double[] expectedOutput, double eta) {
+        System.out.println("Output after " + " ".repeat(Math.max(0, x)) + "0 trainings:" + Arrays.toString(calculateOutput(input)));
+        int completedTrainings = 0;
+        
+        for (int i = 1; i <= x; i++) {
+            int nextTrainingCounter = (int) Math.pow(10, i);
+            trainMultipleTimes(nextTrainingCounter - completedTrainings, input, expectedOutput, eta);
+            completedTrainings = nextTrainingCounter;
+            
+            System.out.println("Output after " + " ".repeat(x - i) + completedTrainings + " trainings:" + Arrays.toString(calculateOutput(input)));
+        }
+        
     }
 
     private void backpropError(double[] expectedOutputs) {
