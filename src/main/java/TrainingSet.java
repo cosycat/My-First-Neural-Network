@@ -23,6 +23,10 @@ public class TrainingSet {
         trainingData.add(newSet);
     }
     
+    public TrainingData getData(int index) {
+        return trainingData.get(index);
+    }
+    
     @Override
     public String toString() {
         String s = " Training Set [ " + inputSize + " : " + outputSize + " ]\n";

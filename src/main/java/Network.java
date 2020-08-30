@@ -67,12 +67,21 @@ public class Network {
         updateWeightsAndBias(eta);
     }
     
-    public void trainWithDataSet(TrainingSet set, int trainingCycles, double eta) {
+    public void trainWithDataSet(TrainingSet set, int trainingCycles, double eta, boolean printLog) {
         for (int cycle = 0; cycle < trainingCycles; cycle++) {
             for (int trainingData = 0; trainingData < set.getDataCount(); trainingData++) {
                 train(set.getInput(trainingData), set.getOutput(trainingData), eta);
             }
         }
+        if (printLog) {
+            double mse = calcualteMSEAverage(set);
+            System.out.println(set);
+            System.out.println("MSE after " + trainingCycles + " training cycles: " + mse);
+        }
+    }
+    
+    public void trainWithDataSet(TrainingSet set, int trainingCycles, double eta) {
+        trainWithDataSet(set, trainingCycles, eta, true);
     }
     
     /**
@@ -149,8 +158,31 @@ public class Network {
         }
     }
     
+    public double calculateMSE(TrainingData trainingData) {
+        return calculateMSE(trainingData.getInput(), trainingData.getExpectedOutput());
+    }
+    
+    public double calculateMSE(double[] input, double[] expectedOutput) {
+        if (input.length != inputLayerSize || expectedOutput.length != outputLayerSize) throw new IllegalArgumentException("calculateMSE failed because of wrong Data size.");
+        calculateOutput(input);
+        double v = 0;
+        for (int i = 0; i < expectedOutput.length; i++) {
+            v += Math.pow(expectedOutput[i] - output[numberOfLayers - 1][i], 2);
+        }
+        return v / (2d * expectedOutput.length);
+    }
+    
+    public double calcualteMSEAverage(TrainingSet set) {
+        double v = 0;
+        for (int i = 0; i < set.getDataCount(); i++) {
+            v += calculateMSE(set.getData(i));
+        }
+        return v / set.getDataCount();
+    }
+    
+    
     private double calculateSigmoidFunction(double x) {
         return 1d / (1 + Math.exp(-x));
     }
-
+    
 }

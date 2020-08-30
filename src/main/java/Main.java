@@ -20,12 +20,7 @@ public class Main {
         trainingSet.addData(input, expectedOutput);
         trainingSet.addData(input2, expectedOutput2);
         
-        network.trainWithDataSet(trainingSet, 10000, 0.3);
-    
-        System.out.println(trainingSet);
-    
-        System.out.println(Arrays.toString(network.calculateOutput(input)));
-        System.out.println(Arrays.toString(network.calculateOutput(input2)));
+        network.trainWithDataSet(trainingSet, 10000, 0.3, true);
    
 
 
