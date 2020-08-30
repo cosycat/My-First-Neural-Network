@@ -67,6 +67,14 @@ public class Network {
         updateWeightsAndBias(eta);
     }
     
+    public void trainWithDataSet(TrainingSet set, int trainingCycles, double eta) {
+        for (int cycle = 0; cycle < trainingCycles; cycle++) {
+            for (int trainingData = 0; trainingData < set.getDataCount(); trainingData++) {
+                train(set.getInput(trainingData), set.getOutput(trainingData), eta);
+            }
+        }
+    }
+    
     /**
      * Train this NN once with multiple sets of input and expected output.
      * @param trainingCount The number of times this NN shoul be trained with this input/output pairing.
