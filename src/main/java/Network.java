@@ -125,13 +125,18 @@ public class Network {
     private void updateWeightsAndBias(double eta) {
         for (int layer = 1; layer < numberOfLayers; layer++) {
             for (int neuron = 0; neuron < layerSizes[layer]; neuron++) {
-                for (int prevNeuron = 0; prevNeuron < layerSizes[layer - 1]; prevNeuron++) {
-                    double outputPrevNeuron = output[layer-1][prevNeuron];
-                    double delta = -eta * outputPrevNeuron * errorSignal[layer][neuron];
-                    weights[layer][neuron][prevNeuron] += delta;
-                }
+                
+                // Update bias
                 double delta = -eta * errorSignal[layer][neuron];
                 bias[layer][neuron] += delta;
+                
+                // Update weights
+                for (int prevNeuron = 0; prevNeuron < layerSizes[layer - 1]; prevNeuron++) {
+                    double outputPrevNeuron = output[layer-1][prevNeuron];
+                    delta *= outputPrevNeuron;
+                    weights[layer][neuron][prevNeuron] += delta;
+                }
+                
             }
         }
     }
