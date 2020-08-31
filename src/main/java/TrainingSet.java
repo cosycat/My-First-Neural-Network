@@ -38,6 +38,15 @@ public class TrainingSet {
         return s;
     }
     
+    public void printOnConsole() {
+        System.out.println(" Training Set [ " + inputSize + " : " + outputSize + " ]\n");
+        System.out.println("----------------------\n");
+        for (int i = 0; i < getDataCount(); i++) {
+            System.out.println(i + ": " + Arrays.toString(trainingData.get(i).getInput()) + " ->||-> " + Arrays.toString(trainingData.get(i).getExpectedOutput()) + "\n");
+        }
+        System.out.println("----------------------\n");
+    }
+    
     public int getDataCount() {
         return trainingData.size();
     }
