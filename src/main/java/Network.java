@@ -67,6 +67,25 @@ public class Network {
         updateWeightsAndBias(eta);
     }
     
+    /**
+     * Train this NN once with every entry of the given TrainingSet.
+     *
+     * @param set The given TrainingSet.
+     * @param eta The learning rate.
+     * @param printLog Whether the MSE should be calculated and printed.
+     */
+    public void trainWithDataSet(TrainingSet set, double eta, boolean printLog) {
+        trainWithDataSet(set, 1, eta, printLog);
+    }
+    
+    /**
+     * Train this NN multiple times with every entry of the given TrainingSet.
+     *
+     * @param set The given TrainingSet.
+     * @param trainingCycles How many times the whole set should be trained with.
+     * @param eta The learning rate.
+     * @param printLog Whether the MSE should be calculated and printed.
+     */
     public void trainWithDataSet(TrainingSet set, int trainingCycles, double eta, boolean printLog) {
         for (int cycle = 0; cycle < trainingCycles; cycle++) {
             for (int trainingData = 0; trainingData < set.getDataCount(); trainingData++) {
@@ -75,7 +94,6 @@ public class Network {
         }
         if (printLog) {
             double mse = calcualteMSEAverage(set);
-            System.out.println(set);
             System.out.println("MSE after " + trainingCycles + " training cycles: " + mse);
         }
     }
@@ -84,40 +102,6 @@ public class Network {
         trainWithDataSet(set, trainingCycles, eta, true);
     }
     
-    /**
-     * Train this NN once with multiple sets of input and expected output.
-     * @param trainingCount The number of times this NN shoul be trained with this input/output pairing.
-     * @param input The input to calculate the output.
-     * @param expectedOutput The output which is to be expected by the input.
-     * @param eta The learning rate.
-     */
-    public void trainMultipleTimes(int trainingCount, double[] input, double[] expectedOutput, double eta) {
-        for (int i = 0; i < trainingCount; i++) {
-            train(input, expectedOutput, eta);
-        }
-    }
-    
-    /**
-     * Trains the NN 10^x times with the same input/output.
-     * Prints the output after 10, 100, 1000, …, 10^x times.
-     * @param x How often it will be calculated
-     * @param input The input to calculate the output.
-     * @param expectedOutput The output which is to be expected by the input.
-     * @param eta The learning rate.
-     */
-    public void trainWithExponentialOutput(int x, double[] input, double[] expectedOutput, double eta) {
-        System.out.println("Output after " + " ".repeat(Math.max(0, x)) + "0 trainings:" + Arrays.toString(calculateOutput(input)));
-        int completedTrainings = 0;
-        
-        for (int i = 1; i <= x; i++) {
-            int nextTrainingCounter = (int) Math.pow(10, i);
-            trainMultipleTimes(nextTrainingCounter - completedTrainings, input, expectedOutput, eta);
-            completedTrainings = nextTrainingCounter;
-            
-            System.out.println("Output after " + " ".repeat(x - i) + completedTrainings + " trainings:" + Arrays.toString(calculateOutput(input)));
-        }
-        
-    }
 
     private void backpropError(double[] expectedOutputs) {
         for (int neuron = 0; neuron < outputLayerSize; neuron++) {
