@@ -9,21 +9,30 @@ import java.util.stream.Stream;
 public class MnistNumberDetector {
     
     private final double MAX_PIXEL_BRIGHTNESS = 256.0;
+    private final double ETA = 0.3;
     
     private final TrainingSet trainingSet;
+    private final TrainingSet testSet;
+    private final Network network;
     
     public MnistNumberDetector() throws IOException {
-        this.trainingSet = loadTrainingSet();
-        System.out.println("MnistNumberDetector.MnistNumberDetector - Data Loaded!");
-        System.out.println(trainingSet);
+        System.out.println("Loading Training Data...");
+        this.trainingSet = loadTrainingSet("train-images.idx3-ubyte", "train-labels.idx1-ubyte");
+        System.out.println("Training Data Loaded!");
+
+        System.out.println("Loading Test Data...");
+        this.testSet = loadTrainingSet("t10k-images.idx3-ubyte", "t10k-labels.idx1-ubyte");
+        System.out.println("Test Data Loaded!");
+        
+        network = new Network(trainingSet.getInputSize(), 16, 16, trainingSet.getOutputSize());
     }
     
-    private TrainingSet loadTrainingSet() throws IOException {
+    private TrainingSet loadTrainingSet(String imageFileName, String labelFileName) throws IOException {
         
         String path = new File("").getAbsolutePath();
-        path += "/src/main/resources";
-        MnistImageFile imageFile = new MnistImageFile(path + "/train-images.idx3-ubyte", "rw");
-        MnistLabelFile labelFile = new MnistLabelFile(path + "/train-labels.idx1-ubyte", "rw");
+        path += "/src/main/resources/";
+        MnistImageFile imageFile = new MnistImageFile(path + imageFileName, "rw");
+        MnistLabelFile labelFile = new MnistLabelFile(path + labelFileName, "rw");
         
         int numberOfImages = imageFile.getCount();
         int numberOfLabels = labelFile.getCount();
@@ -53,6 +62,19 @@ public class MnistNumberDetector {
         
         return trainingSet;
     }
+    
+    
+    public void train() {
+        network.trainWithDataSet(trainingSet, 1, ETA, true);
+    }
+    
+    public void test() {
+        double mseAverage = network.calcualteMSEAverage(testSet);
+        System.out.println("MSE of test set: " + mseAverage);
+    }
+    
+    
+    
     
     public TrainingSet getTrainingSet() {
         return trainingSet;

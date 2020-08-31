@@ -59,4 +59,11 @@ public class TrainingSet {
         return trainingData.get(index).getExpectedOutput();
     }
     
+    public int getInputSize() {
+        return inputSize;
+    }
+    
+    public int getOutputSize() {
+        return outputSize;
+    }
 }

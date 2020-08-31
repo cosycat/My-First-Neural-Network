@@ -12,8 +12,9 @@ public class Main {
     public static void main(String[] args) throws IOException {
     
         MnistNumberDetector numberDetector = new MnistNumberDetector();
-    
-        //System.out.println(numberDetector.getTrainingSet());
+        
+        numberDetector.train();
+        numberDetector.test();
     
     }
     
