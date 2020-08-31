@@ -90,7 +90,11 @@ public class Network {
         for (int cycle = 0; cycle < trainingCycles; cycle++) {
             for (int trainingData = 0; trainingData < set.getDataCount(); trainingData++) {
                 train(set.getInput(trainingData), set.getOutput(trainingData), eta);
+                if (printLog && trainingData % (set.getDataCount()/20) == 0) {
+                    System.out.println("Trained with " + trainingData * 100 / set.getDataCount() + "% of Data.");
+                }
             }
+            System.out.println("Network.trainWithDataSet - Cycle " + (cycle + 1) + " completed!");
         }
         if (printLog) {
             double mse = calcualteMSEAverage(set);

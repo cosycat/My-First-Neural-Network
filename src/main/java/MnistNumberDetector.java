@@ -46,6 +46,9 @@ public class MnistNumberDetector {
             output[label] = 1.0;
             
             trainingSet.addData(input, output);
+            if (dataIndex % (numberOfImages/20) == 0) {
+                System.out.println("Read " + dataIndex * 100 / numberOfImages + "% of Data.");
+            }
         }
         
         return trainingSet;
