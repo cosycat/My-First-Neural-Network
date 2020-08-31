@@ -59,11 +59,9 @@ public class MnistNumberDetector {
             double[] input = new double[imageFile.getEntryLength()];
             double[] output = new double[10];
     
-            int[][] image = imageFile.readImage();
-            input = Stream.of(image)
-                    .flatMapToInt(Arrays::stream)
-                    .mapToDouble(value -> value / MAX_PIXEL_BRIGHTNESS)
-                    .toArray();
+            for (int pixel = 0; pixel < input.length; pixel++) {
+                input[pixel] = imageFile.read();
+            }
     
             int label = labelFile.readLabel();
             output[label] = 1.0;
