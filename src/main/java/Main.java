@@ -1,11 +1,35 @@
+import mnist.MnistImageFile;
+import mnist.MnistLabelFile;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 
 public class Main {
+    
+    
+    public static void main(String[] args) throws IOException {
+    
+        MnistNumberDetector numberDetector = new MnistNumberDetector();
+    
+        //System.out.println(numberDetector.getTrainingSet());
+    
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
-    public static void main(String[] args) {
-        int inputSize = 4;
-        int outputSize = 2;
+    /*public static void main(String[] args) {
+        int inputSize = 28 * 28;
+        int outputSize = 10;
         Network network = new Network(inputSize, 3, 3, outputSize);
 
         double eta = 0.3;
@@ -31,7 +55,7 @@ public class Main {
         }
         double[] output = network.calculateOutput(inputArray);
         System.out.println(Arrays.toString(output));
-        */
-    }
+        *//*
+    }*/
 
 }
