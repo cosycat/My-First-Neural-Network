@@ -1,10 +1,4 @@
-import mnist.MnistImageFile;
-import mnist.MnistLabelFile;
-
-import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Random;
 
 public class Main {
     
@@ -13,9 +7,6 @@ public class Main {
     
         MnistNumberDetector numberDetector = new MnistNumberDetector();
         
-        numberDetector.train();
-        numberDetector.test();
-    
     }
     
     

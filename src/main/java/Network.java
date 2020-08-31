@@ -1,4 +1,7 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class Network {
 
@@ -87,6 +90,8 @@ public class Network {
      * @param printLog Whether the MSE should be calculated and printed.
      */
     public void trainWithDataSet(TrainingSet set, int trainingCycles, double eta, boolean printLog) {
+        if (printLog)
+            System.out.println("Starting training with " + trainingCycles + " cycles...");
         for (int cycle = 0; cycle < trainingCycles; cycle++) {
             for (int trainingData = 0; trainingData < set.getDataCount(); trainingData++) {
                 train(set.getInput(trainingData), set.getOutput(trainingData), eta);
@@ -94,11 +99,13 @@ public class Network {
                     System.out.println("Trained with " + trainingData * 100 / set.getDataCount() + "% of Data.");
                 }
             }
-            System.out.println("Network.trainWithDataSet - Cycle " + (cycle + 1) + " completed!");
+            if (printLog)
+                System.out.println("Training cycle " + (cycle + 1) + " completed!");
         }
         if (printLog) {
+            System.out.println("Training completed!");
             double mse = calcualteMSEAverage(set);
-            System.out.println("MSE after " + trainingCycles + " training cycles: " + mse);
+            System.out.println("MSE of training set after " + trainingCycles + " training cycles: " + mse);
         }
     }
     
@@ -160,6 +167,12 @@ public class Network {
         return v / (2d * expectedOutput.length);
     }
     
+    /**
+     * Calculates the average of the Mean Squared Error of all the TrainingData in the given TrainingSet.
+     *
+     * @param set The given TrainingSet.
+     * @return The average Mean Squared Error.
+     */
     public double calcualteMSEAverage(TrainingSet set) {
         double v = 0;
         for (int i = 0; i < set.getDataCount(); i++) {
@@ -167,6 +180,8 @@ public class Network {
         }
         return v / set.getDataCount();
     }
+    
+    
     
     
     private double calculateSigmoidFunction(double x) {

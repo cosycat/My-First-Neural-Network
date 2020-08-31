@@ -66,4 +66,8 @@ public class TrainingSet {
     public int getOutputSize() {
         return outputSize;
     }
+    
+    public ArrayList<TrainingData> getTrainingData() {
+        return (ArrayList<TrainingData>) trainingData.clone();
+    }
 }

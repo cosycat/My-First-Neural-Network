@@ -3,13 +3,18 @@ import mnist.MnistLabelFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class MnistNumberDetector {
     
     private final double MAX_PIXEL_BRIGHTNESS = 256.0;
     private final double ETA = 0.3;
+    
+    private final List<Integer> HIDDEN_LAYERS = List.of(16, 10);
     
     private final TrainingSet trainingSet;
     private final TrainingSet testSet;
@@ -23,8 +28,17 @@ public class MnistNumberDetector {
         System.out.println("Loading Test Data...");
         this.testSet = loadTrainingSet("t10k-images.idx3-ubyte", "t10k-labels.idx1-ubyte");
         System.out.println("Test Data Loaded!");
+    
+        ArrayList<Integer> allLayers = new ArrayList<>();
+        allLayers.add(trainingSet.getInputSize());
+        allLayers.addAll(HIDDEN_LAYERS);
+        allLayers.add(trainingSet.getOutputSize());
+        network = new Network(allLayers.stream().mapToInt(Integer::intValue).toArray());
         
-        network = new Network(trainingSet.getInputSize(), 16, 16, trainingSet.getOutputSize());
+        train(10);
+        calculateMseOfTestSet();
+        System.out.println("Error in test set: " + calculateErrorPercentage(testSet) + "%");
+        System.out.println("Error in training set: " + calculateErrorPercentage(trainingSet) + "%");
     }
     
     private TrainingSet loadTrainingSet(String imageFileName, String labelFileName) throws IOException {
@@ -64,16 +78,37 @@ public class MnistNumberDetector {
     }
     
     
-    public void train() {
-        network.trainWithDataSet(trainingSet, 1, ETA, true);
+    public void train(int trainingCycles) {
+        network.trainWithDataSet(trainingSet, trainingCycles, ETA, true);
     }
     
-    public void test() {
+    public void calculateMseOfTestSet() {
         double mseAverage = network.calcualteMSEAverage(testSet);
         System.out.println("MSE of test set: " + mseAverage);
     }
     
     
+    /**
+     * Calculates the Error Percentage of all the Test Images in the given TrainingSet.
+     *
+     * @param set The TrainingSet with test data.
+     * @return The Error in %.
+     */
+    public double calculateErrorPercentage(TrainingSet set) {
+        double countCorrect = 0;
+        double countWrong = 0;
+        for (TrainingData data : set.getTrainingData()) {
+            int expectedDigit = ArrayHelperMethods.indexOfHighestValue(data.getExpectedOutput());
+            int actualDigit = ArrayHelperMethods.indexOfHighestValue(network.calculateOutput(data.getInput()));
+            if (expectedDigit == actualDigit) {
+                countCorrect++;
+            } else {
+                countWrong++;
+            }
+        }
+        
+        return countCorrect * 100 / (countCorrect+countWrong);
+    }
     
     
     public TrainingSet getTrainingSet() {
