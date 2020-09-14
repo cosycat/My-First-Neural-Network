@@ -14,7 +14,7 @@ public class MnistNumberDetector {
     private final double MAX_PIXEL_BRIGHTNESS = 256.0;
     private final double ETA = 0.3;
     
-    private final List<Integer> HIDDEN_LAYERS = List.of(16, 10);
+    private final List<Integer> HIDDEN_LAYERS = List.of(70, 35);
     
     private final TrainingSet trainingSet;
     private final TrainingSet testSet;
@@ -60,7 +60,7 @@ public class MnistNumberDetector {
             double[] output = new double[10];
     
             for (int pixel = 0; pixel < input.length; pixel++) {
-                input[pixel] = imageFile.read();
+                input[pixel] = imageFile.read() / MAX_PIXEL_BRIGHTNESS;
             }
     
             int label = labelFile.readLabel();

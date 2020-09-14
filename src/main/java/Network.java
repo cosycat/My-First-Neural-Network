@@ -31,10 +31,10 @@ public class Network {
         for (int i = 0; i < numberOfLayers; i++) {
             this.output[i] = new double[layerSizes[i]];
             this.errorSignal[i] = new double[layerSizes[i]];
-            this.bias[i] = ArrayHelperMethods.createRandomArray(layerSizes[i], 0.3, 0.7);
+            this.bias[i] = ArrayHelperMethods.createRandomArray(layerSizes[i], -0.5, 0.7);
 
             if (i > 0) {
-                this.weights[i] = ArrayHelperMethods.createRandom2DArray(layerSizes[i], layerSizes[i-1], -0.3, 0.5);
+                this.weights[i] = ArrayHelperMethods.createRandom2DArray(layerSizes[i], layerSizes[i-1], -1, 0.5);
             }
         }
     }
@@ -95,12 +95,16 @@ public class Network {
         for (int cycle = 0; cycle < trainingCycles; cycle++) {
             for (int trainingData = 0; trainingData < set.getDataCount(); trainingData++) {
                 train(set.getInput(trainingData), set.getOutput(trainingData), eta);
-                if (printLog && trainingData % (set.getDataCount()/20) == 0) {
+                if (printLog && trainingData % (set.getDataCount()/10) == 0) {
                     System.out.println("Trained with " + trainingData * 100 / set.getDataCount() + "% of Data.");
                 }
             }
-            if (printLog)
+            if (printLog) {
                 System.out.println("Training cycle " + (cycle + 1) + " completed!");
+                double mse = calcualteMSEAverage(set);
+                System.out.println("MSE of training set: " + mse);
+            }
+            
         }
         if (printLog) {
             System.out.println("Training completed!");
